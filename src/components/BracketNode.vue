@@ -1,19 +1,13 @@
 <template>
-  <div class="vt-item" v-if="playersArePresent">
+  <div class="vt-item" v-if="teamsArePresent">
     <div :class="getBracketNodeClass(bracketNode)">
-      <GamePlayer
-        :bracket-node="bracketNode"
-        :highlighted-player-id="highlightedPlayerId"
-        @onSelectedPlayer="highlightPlayer"
-        @onDeselectedPlayer="unhighlightPlayer"
+      <GameMatch
+        :match="bracketNode"
+        :highlighted-team-id="highlightedTeamId"
+        @onSelectedTeam="highlightTeam"
+        @onDeselectedTeam="unhighlightTeam"
       >
-        <template #player="{ player }">
-          <slot name="player" :player="player" />
-        </template>
-        <template #player-extension-bottom="{ match }">
-          <slot name="player-extension-bottom" :match="match" />
-        </template>
-      </GamePlayer>
+      </GameMatch>
     </div>
 
     <div
@@ -23,31 +17,19 @@
       <div class="vt-item-child" v-if="bracketNode.games[0]">
         <BracketNode
           :bracket-node="bracketNode.games[0]"
-          :highlighted-player-id="highlightedPlayerId"
-          @onSelectedPlayer="highlightPlayer"
-          @onDeselectedPlayer="unhighlightPlayer"
+          :highlighted-team-id="highlightedTeamId"
+          @onSelectedTeam="highlightTeam"
+          @onDeselectedTeam="unhighlightTeam"
         >
-          <template #player="{ player }">
-            <slot name="player" :player="player" />
-          </template>
-          <template #player-extension-bottom="{ match }">
-            <slot name="player-extension-bottom" :match="match" />
-          </template>
         </BracketNode>
       </div>
       <div class="vt-item-child" v-if="bracketNode.games[1]">
         <BracketNode
           :bracket-node="bracketNode.games[1]"
-          :highlighted-player-id="highlightedPlayerId"
-          @onSelectedPlayer="highlightPlayer"
-          @onDeselectedPlayer="unhighlightPlayer"
+          :highlighted-team-id="highlightedTeamId"
+          @onSelectedTeam="highlightTeam"
+          @onDeselectedTeam="unhighlightTeam"
         >
-          <template #player="{ player }">
-            <slot name="player" :player="player" />
-          </template>
-          <template #player-extension-bottom="{ match }">
-            <slot name="player-extension-bottom" :match="match" />
-          </template>
         </BracketNode>
       </div>
     </div>
@@ -55,21 +37,21 @@
 </template>
 
 <script lang="ts">
-import GamePlayer from "./GamePlayer.vue";
+import GameMatch from "./GameMatch.vue";
 
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({
   components: {
-    GamePlayer,
+    GameMatch,
   },
 })
 export default class BracketNode extends Vue {
   @Prop({ type: Object, default: {} }) bracketNode!: any;
-  @Prop({ type: String, default: undefined }) highlightedPlayerId!: string;
+  @Prop({ type: String, default: undefined }) highlightedTeamId!: string;
 
-  get playersArePresent(): any {
-    return this.bracketNode.player1 && this.bracketNode.player1;
+  get teamsArePresent(): any {
+    return this.bracketNode.team1 && this.bracketNode.team2;
   }
 
   private getBracketNodeClass(bracketNode: any): string {
@@ -84,26 +66,12 @@ export default class BracketNode extends Vue {
     return "";
   }
 
-  private getPlayerClass(player: any): string {
-    if (player.winner === null || player.winner === undefined) {
-      return "";
-    }
-
-    let clazz = player.winner ? "winner" : "defeated";
-
-    if (this.highlightedPlayerId === player.id) {
-      clazz += " highlight";
-    }
-
-    return clazz;
+  private highlightTeam(playerId: string): void {
+    this.$emit("onSelectedTeam", playerId);
   }
 
-  private highlightPlayer(playerId: string): void {
-    this.$emit("onSelectedPlayer", playerId);
-  }
-
-  private unhighlightPlayer(): void {
-    this.$emit("onDeselectedPlayer");
+  private unhighlightTeam(): void {
+    this.$emit("onDeselectedTeam");
   }
 }
 </script>
@@ -127,31 +95,62 @@ export default class BracketNode extends Vue {
   align-items: center;
 }
 
-.vt-item-players {
+.vt-item-teams {
   flex-direction: column;
-  background-color: #999999;
   margin: 0;
   color: white;
 }
 
-.vt-item-players .vt-player {
-  padding: 10px;
+.vt-item-teams .vt-team {
+  display: flex;
+  font-size: 10px;
+  width: 140px;
+  background-color: #59595e;
 }
 
-.vt-item-players .winner {
-  background-color: darkgreen;
+.vt-item-teams .vt-team .name {
+  padding: 3px 0px 3px 6px;
+  font-size: 10px;
+  width: 110px;
+  text-overflow: ellipsis;
 }
 
-.vt-item-players .defeated {
-  background-color: firebrick;
+.vt-item-teams .vt-team .score {
+  margin-left: auto;
+  padding: 3px;
+  font-size: 12px;
+  width: 20px;
+  text-align: center;
+  background-color: #787a7f;
 }
 
-.vt-item-players .winner.highlight {
-  background-color: darkseagreen;
+.vt-item-teams .vt-team.winner .score {
+  background-color: #ee7b3c;
 }
 
-.vt-item-players .defeated.highlight {
-  background-color: indianred;
+.vt-item-teams .vt-team-top .score {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.vt-item-teams .vt-team-bot .score {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.vt-item-teams .vt-team-top {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: 2px solid #414146;
+}
+
+.vt-item-teams .vt-team-bot {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.vt-item-teams .vt-team.highlight {
+  background-color: #222222;
 }
 
 .vt-item-parent:after {

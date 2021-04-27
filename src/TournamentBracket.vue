@@ -2,23 +2,18 @@
   <div class="vt-wrapper" v-if="recursiveBracket">
     <BracketNode
       :bracket-node="recursiveBracket"
-      @onSelectedPlayer="highlightPlayer"
-      @onDeselectedPlayer="unhighlightPlayer"
-      :highlighted-player-id="highlightedPlayerId"
+      @onSelectedTeam="highlightTeam"
+      @onDeselectedTeam="unhighlightTeam"
+      :highlighted-team-id="highlightedTeamId"
     >
-      <template #player="{ player }">
-        <slot name="player" :player="player" />
-      </template>
-      <template #player-extension-bottom="{ match }">
-        <slot name="player-extension-bottom" :match="match" />
-      </template>
     </BracketNode>
   </div>
 </template>
 
 <script lang="ts">
+import IRound from "./interface/IRound";
 import BracketNode from "./components/BracketNode.vue";
-import * as recursiveBracket from "./components/recursiveBracket";
+import * as recursiveBracket from "./recursiveBracket";
 
 import { Component, Prop, Vue } from "vue-property-decorator";
 
@@ -28,24 +23,19 @@ import { Component, Prop, Vue } from "vue-property-decorator";
   },
 })
 export default class TournamentBracket extends Vue {
-  @Prop({ type: Array, default: [] }) private rounds!: any[];
-  @Prop({ type: Array, default: null }) private flatTree!: any[];
-  private highlightedPlayerId?: string;
+  @Prop({ type: Array, default: [] }) private rounds!: IRound[];
+  private highlightedTeamId: string | undefined = "";
 
-  private highlightPlayer(id: string): void {
-    this.highlightedPlayerId = id;
+  private highlightTeam(id: string): void {
+    this.highlightedTeamId = id;
   }
 
-  private unhighlightPlayer(): void {
-    this.highlightedPlayerId = undefined;
+  private unhighlightTeam(): void {
+    this.highlightedTeamId = undefined;
   }
 
   get recursiveBracket(): any {
     const copyRound = this.rounds;
-    const copyFlatTree = this.flatTree;
-    if (this.flatTree) {
-      return recursiveBracket.transformFlatTree(copyFlatTree);
-    }
 
     return recursiveBracket.transform(copyRound);
   }

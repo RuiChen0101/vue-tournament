@@ -1,9 +1,5 @@
 <template>
-  <TournamentBracket :rounds="rounds">
-    <template #player="{ player }">
-      {{ player.name }}
-    </template>
-  </TournamentBracket>
+  <TournamentBracket :rounds="rounds"> </TournamentBracket>
 </template>
 
 <script lang="ts">
@@ -21,20 +17,24 @@ export default class App extends Vue {
     {
       games: [
         {
-          player1: { id: "1", name: "Competitor 1", winner: true },
-          player2: { id: "2", name: "Competitor 2", winner: false },
+          winner: "1",
+          team1: { id: "1", name: "Competitor 1", score: 2 },
+          team2: { id: "2", name: "Competitor 2", score: 1 },
         },
         {
-          player1: { id: "3", name: "Competitor 3", winner: false },
-          player2: { id: "4", name: "Competitor 4", winner: true },
+          winner: "4",
+          team1: { id: "3", name: "Competitor 3", score: 0 },
+          team2: { id: "4", name: "Competitor 4", score: 2 },
         },
         {
-          player1: { id: "5", name: "Competitor 5", winner: true },
-          player2: { id: "6", name: "Competitor 6", winner: false },
+          winner: "5",
+          team1: { id: "5", name: "Competitor 5", score: 2 },
+          team2: { id: "6", name: "Competitor 6", score: 1 },
         },
         {
-          player1: { id: "7", name: "Competitor 7", winner: false },
-          player2: { id: "8", name: "Competitor 8", winner: true },
+          winner: "8",
+          team1: { id: "7", name: "Competitor 7", score: 0 },
+          team2: { id: "8", name: "Competitor 8", score: 2 },
         },
       ],
     },
@@ -42,12 +42,14 @@ export default class App extends Vue {
     {
       games: [
         {
-          player1: { id: "1", name: "Competitor 1", winner: false },
-          player2: { id: "4", name: "Competitor 4", winner: true },
+          winner: "4",
+          team1: { id: "1", name: "Competitor 1", score: 1 },
+          team2: { id: "4", name: "Competitor 4", score: 2 },
         },
         {
-          player1: { id: "5", name: "Competitor 5", winner: false },
-          player2: { id: "8", name: "Competitor 8", winner: true },
+          winner: "8",
+          team1: { id: "5", name: "Competitor 5", score: 1 },
+          team2: { id: "8", name: "Competitor 8", score: 2 },
         },
       ],
     },
@@ -55,8 +57,9 @@ export default class App extends Vue {
     {
       games: [
         {
-          player1: { id: "4", name: "Competitor 4", winner: false },
-          player2: { id: "8", name: "Competitor 8", winner: true },
+          winner: "8",
+          team1: { id: "4", name: "Competitor 4", score: 1 },
+          team2: { id: "8", name: "Competitor 8", score: 3 },
         },
       ],
     },

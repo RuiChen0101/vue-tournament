@@ -1,29 +1,35 @@
 # vue-tournament
 
-## Project setup
+Tournament brackets generator using Vue.
+
+base on [vue-tournament-bracket](https://github.com/kamilwylegala/vue-tournament-bracket) and combine ui style of [eact-tournament-bracket](https://github.com/moodysalem/react-tournament-bracket)
+
+![example](./image/example.png)
+
+## Development
+
+Checkout repository and:
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
 
-### Compiles and minifies for production
+Then open browser and test your changes using `App.vue` main component for development purposes.
+
+See `package.json` to discover available commands.
+
+## Releasing
+
 ```
+npm test
+npm run eslint
 npm run build
+git commit
+npm version <version>
+git push
+npm publish --access=public
 ```
 
-### Run your unit tests
-```
-npm run test:unit
-```
+## License
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+MIT
