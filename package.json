@@ -8,7 +8,8 @@
   "main": "dist/vue-tournament.common.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name vue-tournament ./src/Tournament.vue",
+    "deploy": "npm run build & npm publish --access public",
+    "build": "vue-cli-service build --target lib --name vue-tournament ./src/TournamentBracket.vue",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
