@@ -1,8 +1,8 @@
 <template>
-  <div class="vt-item" v-if="teamsArePresent">
+  <div class="vt-item" v-if="matchArePresent">
     <div :class="getBracketNodeClass(bracketNode)">
       <GameMatch
-        :match="bracketNode"
+        :bracket-node="bracketNode"
         :highlighted-team-id="highlightedTeamId"
         @onSelectedTeam="highlightTeam"
         @onDeselectedTeam="unhighlightTeam"
@@ -11,21 +11,21 @@
     </div>
 
     <div
-      v-if="bracketNode.games[0] || bracketNode.games[1]"
+      v-if="bracketNode.children[0] || bracketNode.children[1]"
       class="vt-item-children"
     >
-      <div class="vt-item-child" v-if="bracketNode.games[0]">
+      <div class="vt-item-child" v-if="bracketNode.children[0]">
         <BracketNode
-          :bracket-node="bracketNode.games[0]"
+          :bracket-node="bracketNode.children[0]"
           :highlighted-team-id="highlightedTeamId"
           @onSelectedTeam="highlightTeam"
           @onDeselectedTeam="unhighlightTeam"
         >
         </BracketNode>
       </div>
-      <div class="vt-item-child" v-if="bracketNode.games[1]">
+      <div class="vt-item-child" v-if="bracketNode.children[1]">
         <BracketNode
-          :bracket-node="bracketNode.games[1]"
+          :bracket-node="bracketNode.children[1]"
           :highlighted-team-id="highlightedTeamId"
           @onSelectedTeam="highlightTeam"
           @onDeselectedTeam="unhighlightTeam"
@@ -38,6 +38,7 @@
 
 <script lang="ts">
 import GameMatch from "./GameMatch.vue";
+import IBracketNode from "../interface/IBracketNode";
 
 import { Component, Prop, Vue } from "vue-property-decorator";
 
@@ -47,15 +48,15 @@ import { Component, Prop, Vue } from "vue-property-decorator";
   },
 })
 export default class BracketNode extends Vue {
-  @Prop({ type: Object, default: {} }) bracketNode!: any;
+  @Prop({ type: Object, default: {} }) bracketNode!: IBracketNode;
   @Prop({ type: String, default: undefined }) highlightedTeamId!: string;
 
-  get teamsArePresent(): any {
-    return this.bracketNode.team1 && this.bracketNode.team2;
+  get matchArePresent(): boolean {
+    return this.bracketNode.match !== undefined;
   }
 
-  private getBracketNodeClass(bracketNode: any): string {
-    if (bracketNode.games[0] || bracketNode.games[1]) {
+  private getBracketNodeClass(bracketNode: IBracketNode): string {
+    if (bracketNode.children[0] || bracketNode.children[1]) {
       return "vt-item-parent";
     }
 
@@ -82,12 +83,6 @@ export default class BracketNode extends Vue {
   flex-direction: row-reverse;
 }
 
-.vt-item p {
-  padding: 20px;
-  margin: 0;
-  background-color: #999999;
-}
-
 .vt-item-parent {
   position: relative;
   margin-left: 50px;
@@ -97,21 +92,26 @@ export default class BracketNode extends Vue {
 
 .vt-item-teams {
   flex-direction: column;
-  margin: 0;
-  color: white;
+  margin-bottom: 16px;
+}
+
+.vt-item-teams .title {
+  font-size: 8px;
+  text-align: left;
 }
 
 .vt-item-teams .vt-team {
   display: flex;
   font-size: 10px;
   width: 140px;
-  background-color: #59595e;
 }
 
 .vt-item-teams .vt-team .name {
-  padding: 3px 0px 3px 6px;
+  padding: 3px 6px;
   font-size: 10px;
   width: 110px;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -121,11 +121,6 @@ export default class BracketNode extends Vue {
   font-size: 12px;
   width: 20px;
   text-align: center;
-  background-color: #787a7f;
-}
-
-.vt-item-teams .vt-team.winner .score {
-  background-color: #ee7b3c;
 }
 
 .vt-item-teams .vt-team-top .score {
@@ -147,10 +142,6 @@ export default class BracketNode extends Vue {
 .vt-item-teams .vt-team-bot {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-}
-
-.vt-item-teams .vt-team.highlight {
-  background-color: #222222;
 }
 
 .vt-item-parent:after {

@@ -1,21 +1,24 @@
+import IMatch from "./interface/IMatch";
 import IRound from "./interface/IRound";
+import IBracketNode from "./interface/IBracketNode";
 
-export const transform = (rounds: IRound[]): any => {
+export const transform = (rounds: IRound[]): IBracketNode | undefined => {
     if (!rounds) {
-        return null;
+        return undefined;
     }
 
     const totalRounds = rounds.length;
 
-    let currentRound = [];
-    let previousRound = [];
-
+    let currentRound: IBracketNode[] = [];
+    let previousRound: IBracketNode[] = [];
+    let totalMatchCounter = 0;
     for (let i = 0; i < totalRounds; i++) {
-        currentRound = rounds[i].games.map((game: any) => {
+        currentRound = rounds[i].matchs.map((match: IMatch) => {
+            totalMatchCounter++;
+            match.title = `${totalMatchCounter}`;
             return {
-                ...game,
-                title: "round " + i,
-                games: [],
+                match: match,
+                children: [],
                 hasParent: !!rounds[i + 1],
             };
         });
@@ -27,11 +30,11 @@ export const transform = (rounds: IRound[]): any => {
 
         for (let j = 0; j < previousRound.length; j++) {
             const matchForCurrentGame = Math.floor(j / 2);
-            currentRound[matchForCurrentGame].games.push(previousRound[j]);
+            currentRound[matchForCurrentGame].children.push(previousRound[j]);
         }
 
         previousRound = currentRound;
     }
 
-    return currentRound[0] || null;
+    return currentRound[0] || undefined;
 }

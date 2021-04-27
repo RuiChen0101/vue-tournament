@@ -1,8 +1,10 @@
 <template>
-  <TournamentBracket :rounds="rounds"> </TournamentBracket>
+  <TournamentBracket :rounds="rounds" />
 </template>
 
 <script lang="ts">
+import IRound from "./interface/IRound";
+
 import { Component, Vue } from "vue-property-decorator";
 import TournamentBracket from "./TournamentBracket.vue";
 
@@ -12,10 +14,10 @@ import TournamentBracket from "./TournamentBracket.vue";
   },
 })
 export default class App extends Vue {
-  rounds: any = [
+  rounds: IRound[] = [
     //Quarter
     {
-      games: [
+      matchs: [
         {
           winner: "1",
           team1: { id: "1", name: "Competitor 1", score: 2 },
@@ -40,7 +42,7 @@ export default class App extends Vue {
     },
     //Semi
     {
-      games: [
+      matchs: [
         {
           winner: "4",
           team1: { id: "1", name: "Competitor 1", score: 1 },
@@ -55,7 +57,7 @@ export default class App extends Vue {
     },
     //Final
     {
-      games: [
+      matchs: [
         {
           winner: "8",
           team1: { id: "4", name: "Competitor 4", score: 1 },
