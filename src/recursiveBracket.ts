@@ -15,6 +15,7 @@ export const transform = (rounds: IRound[]): IBracketNode | undefined => {
     for (let i = 0; i < totalRounds; i++) {
         currentRound = rounds[i].matchs.map((match: IMatch) => {
             totalMatchCounter++;
+            match.id = match.id ?? totalMatchCounter;
             match.title = `${totalMatchCounter}`;
             return {
                 match: match,

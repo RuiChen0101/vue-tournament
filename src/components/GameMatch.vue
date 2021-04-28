@@ -12,6 +12,7 @@
         ]"
         @mouseover="highlightTeam(bracketNode.match.team1.id)"
         @mouseleave="unhighlightTeam"
+        @click="onClick"
       >
         <span class="name">{{ bracketNode.match.team1.name }}</span>
         <span class="score">{{ bracketNode.match.team1.score }}</span>
@@ -25,6 +26,7 @@
         ]"
         @mouseover="highlightTeam(bracketNode.match.team2.id)"
         @mouseleave="unhighlightTeam"
+        @click="onClick"
       >
         <span class="name">{{ bracketNode.match.team2.name }}</span>
         <span class="score">{{ bracketNode.match.team2.score }}</span>
@@ -60,11 +62,15 @@ export default class GameMatch extends Vue {
     return clazz;
   }
 
-  highlightTeam(playerId: string): void {
+  private onClick(): void {
+    this.$emit("onMatchClick", this.bracketNode?.match?.id);
+  }
+
+  private highlightTeam(playerId: string): void {
     this.$emit("onSelectedTeam", playerId);
   }
 
-  unhighlightTeam(): void {
+  private unhighlightTeam(): void {
     this.$emit("onDeselectedTeam");
   }
 }

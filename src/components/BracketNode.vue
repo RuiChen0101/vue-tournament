@@ -6,6 +6,7 @@
         :highlighted-team-id="highlightedTeamId"
         @onSelectedTeam="highlightTeam"
         @onDeselectedTeam="unhighlightTeam"
+        @onMatchClick="onMatchClick"
       >
       </GameMatch>
     </div>
@@ -20,6 +21,7 @@
           :highlighted-team-id="highlightedTeamId"
           @onSelectedTeam="highlightTeam"
           @onDeselectedTeam="unhighlightTeam"
+          @onMatchClick="onMatchClick"
         >
         </BracketNode>
       </div>
@@ -29,6 +31,7 @@
           :highlighted-team-id="highlightedTeamId"
           @onSelectedTeam="highlightTeam"
           @onDeselectedTeam="unhighlightTeam"
+          @onMatchClick="onMatchClick"
         >
         </BracketNode>
       </div>
@@ -67,7 +70,11 @@ export default class BracketNode extends Vue {
     return "";
   }
 
-  private highlightTeam(playerId: string): void {
+  private onMatchClick(matchId: string | number): void {
+    this.$emit("onMatchClick", matchId);
+  }
+
+  private highlightTeam(playerId: string | number): void {
     this.$emit("onSelectedTeam", playerId);
   }
 

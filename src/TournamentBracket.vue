@@ -2,9 +2,10 @@
   <div class="vt-wrapper" v-if="recursiveBracket" :style="cssVars">
     <BracketNode
       :bracket-node="recursiveBracket"
+      :highlighted-team-id="highlightedTeamId"
       @onSelectedTeam="highlightTeam"
       @onDeselectedTeam="unhighlightTeam"
-      :highlighted-team-id="highlightedTeamId"
+      @onMatchClick="onMatchClick"
     >
     </BracketNode>
   </div>
@@ -38,8 +39,12 @@ export default class TournamentBracket extends Vue {
 
   private highlightedTeamId: string | undefined = "";
 
-  private highlightTeam(id: string): void {
-    this.highlightedTeamId = id;
+  private onMatchClick(matchId: string | number): void {
+    this.$emit("onMatchClick", matchId);
+  }
+
+  private highlightTeam(teamId: string): void {
+    this.highlightedTeamId = teamId;
   }
 
   private unhighlightTeam(): void {
