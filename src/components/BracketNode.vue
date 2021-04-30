@@ -46,6 +46,7 @@ import IBracketNode from "../interface/IBracketNode";
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({
+  name: "BracketNode",
   components: {
     GameMatch,
   },
