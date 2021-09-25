@@ -1,23 +1,27 @@
 <template>
-  <TournamentBracket :rounds="rounds" @onMatchClick="onMatchClick" />
+  <TournamentBracket
+    :rounds="rounds"
+    format="default"
+    @onMatchClick="onMatchClick"
+  />
 </template>
 
 <script lang="ts">
 import IRound from "./interface/IRound";
-
 import { Component, Vue } from "vue-property-decorator";
+
 import TournamentBracket from "./TournamentBracket.vue";
 
 // import bracketData from "./mockData/singleElimination8.json";
-import { generateBracket } from "./generators/competitionFactory"
-const bracketData = generateBracket(16);
+import bracketData from "./mockData/singleElimination8WithFeedIn.json";
+// import { generateBracket } from "./generators/competitionFactory";
+// const roundMatchUps = generateBracket(16);
 
 @Component({
   components: {
     TournamentBracket,
   },
 })
-
 export default class App extends Vue {
   rounds: IRound[] = bracketData;
 

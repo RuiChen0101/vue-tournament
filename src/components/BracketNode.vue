@@ -1,6 +1,19 @@
 <template>
   <div class="vt-item" v-if="matchArePresent">
-    <div :class="getBracketNodeClass(bracketNode)">
+    <div
+      v-if="bracketNode.match.feedIn !== undefined"
+      :class="getBracketNodeClass(bracketNode)"
+    >
+      <FeedIn
+        :bracket-node="bracketNode"
+        :highlighted-team-id="highlightedTeamId"
+        @onSelectedTeam="highlightTeam"
+        @onDeselectedTeam="unhighlightTeam"
+        @onMatchClick="onMatchClick"
+      >
+      </FeedIn>
+    </div>
+    <div v-else :class="getBracketNodeClass(bracketNode)">
       <GameMatch
         :bracket-node="bracketNode"
         :highlighted-team-id="highlightedTeamId"
@@ -40,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import FeedIn from "./FeedIn.vue";
 import GameMatch from "./GameMatch.vue";
 import IBracketNode from "../interface/IBracketNode";
 
@@ -49,6 +63,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
   name: "BracketNode",
   components: {
     GameMatch,
+    FeedIn,
   },
 })
 export default class BracketNode extends Vue {
@@ -158,7 +173,7 @@ export default class BracketNode extends Vue {
   width: 25px;
   height: 2px;
   left: 0;
-  top: 50%;
+  top: calc(50% - 1px);
   background-color: gray;
   transform: translateX(-100%);
 }
@@ -183,7 +198,7 @@ export default class BracketNode extends Vue {
   position: absolute;
   background-color: gray;
   right: 0;
-  top: 50%;
+  top: calc(50% - 1px);
   transform: translateX(100%);
   width: 25px;
   height: 2px;
@@ -194,7 +209,7 @@ export default class BracketNode extends Vue {
   position: absolute;
   background-color: gray;
   right: -25px;
-  height: calc(50% + 22px);
+  height: calc(50% + 10px);
   width: 2px;
   top: 50%;
 }
@@ -205,5 +220,30 @@ export default class BracketNode extends Vue {
 
 .vt-item-child:only-child:after {
   display: none;
+}
+
+.vt-item-feedIn {
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.vt-item-feedIn .title {
+  font-size: 8px;
+  text-align: left;
+}
+
+.vt-item-feedIn .vt-feedIn {
+  display: flex;
+  font-size: 10px;
+  width: 140px;
+  border-radius: 5px;
+}
+
+.vt-item-feedIn .vt-feedIn .name {
+  padding: 3px 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

@@ -12,12 +12,13 @@
 </template>
 
 <script lang="ts">
-import IRound from "./interface/IRound";
-import BracketNode from "./components/BracketNode.vue";
-import * as recursiveBracket from "./recursiveBracket";
-
 import { Component, Prop, Vue } from "vue-property-decorator";
+
+import IRound from "./interface/IRound";
 import IBracketNode from "./interface/IBracketNode";
+import BracketNode from "./components/BracketNode.vue";
+import { courthiveAdaptor } from "./adaptor/courthiveAdaptor";
+import { transform as transformBracket } from "./recursiveBracket";
 
 @Component({
   components: {
@@ -25,7 +26,10 @@ import IBracketNode from "./interface/IBracketNode";
   },
 })
 export default class TournamentBracket extends Vue {
-  @Prop({ type: Array, default: [] }) private rounds!: IRound[];
+  @Prop({ type: Array, default: [] }) private rounds!: IRound[] | any;
+  @Prop({ type: String, default: "default" }) private format!:
+    | "default"
+    | "courthive";
   @Prop({ type: String, default: "#ffffff" }) private textColor!: string;
   @Prop({ type: String, default: "#9d999d" }) private titleColor!: string;
   @Prop({ type: String, default: "#59595e" })
@@ -52,8 +56,11 @@ export default class TournamentBracket extends Vue {
   }
 
   get recursiveBracket(): IBracketNode | undefined {
-    const copyRound = this.rounds;
-    return recursiveBracket.transform(copyRound);
+    let copyRound = this.rounds;
+    if (this.format === "courthive") {
+      copyRound = courthiveAdaptor(this.rounds);
+    }
+    return transformBracket(copyRound);
   }
 
   get cssVars(): { [key: string]: string } {
@@ -74,15 +81,18 @@ export default class TournamentBracket extends Vue {
   display: flex;
 }
 
-.vt-item-teams {
+.vt-item-teams,
+.vt-item-feedIn {
   color: var(--text-color);
 }
 
-.vt-item-teams .title {
+.vt-item-teams .title,
+.vt-item-feedIn .title {
   color: var(--title-color);
 }
 
-.vt-item-teams .vt-team {
+.vt-item-teams .vt-team,
+.vt-item-feedIn .vt-feedIn {
   background-color: var(--team-background-color);
 }
 
@@ -94,7 +104,8 @@ export default class TournamentBracket extends Vue {
   background-color: var(--winner-score-background-color);
 }
 
-.vt-item-teams .vt-team.highlight {
+.vt-item-teams .vt-team.highlight,
+.vt-item-feedIn .vt-feedIn.highlight {
   background-color: var(--highlight-team-background-color);
 }
 </style>
