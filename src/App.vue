@@ -12,10 +12,7 @@ import { Component, Vue } from "vue-property-decorator";
 
 import TournamentBracket from "./TournamentBracket.vue";
 
-// import bracketData from "./mockData/singleElimination8.json";
 import bracketData from "./mockData/singleElimination8WithFeedIn.json";
-// import { generateBracket } from "./generators/competitionFactory";
-// const roundMatchUps = generateBracket(16);
 
 @Component({
   components: {

@@ -1,8 +1,8 @@
-# vue-tournament
+# Vue Tournament
 
 Tournament brackets generator using Vue.
 
-base on [vue-tournament-bracket](https://github.com/kamilwylegala/vue-tournament-bracket) and combine ui style of [eact-tournament-bracket](https://github.com/moodysalem/react-tournament-bracket)
+base on [vue-tournament-bracket](https://github.com/kamilwylegala/vue-tournament-bracket) and combine ui style of [react-tournament-bracket](https://github.com/moodysalem/react-tournament-bracket)
 
 ![example](./image/example.png)
 
@@ -96,6 +96,85 @@ export default class App extends Vue {
   }
 }
 </script>
+```
+
+### FeedIn
+
+You can use feed-in to display seeded round
+
+![example](./image/feedin_example.png)
+
+``` json
+[
+    {
+        "matchs": [
+            {
+                "id": "match1",
+                "winner": "1",
+                "team1": {
+                    "id": "1",
+                    "name": "Competitor 1",
+                    "score": 2
+                },
+                "team2": {
+                    "id": "2",
+                    "name": "Competitor 2",
+                    "score": 1
+                }
+            },
+            {
+                "id": "match2",
+                "feedIn": {
+                    "id": "3",
+                    "name": "Competitor 3"
+                }
+            }
+        ]
+    },
+    {
+        "matchs": [
+            {
+                "id": "match3",
+                "winner": "3",
+                "team1": {
+                    "id": "1",
+                    "name": "Competitor 1",
+                    "score": 1
+                },
+                "team2": {
+                    "id": "3",
+                    "name": "Competitor 3",
+                    "score": 2
+                }
+            },
+            {
+                "id": "match4",
+                "feedIn": {
+                    "id": "4",
+                    "name": "Competitor 4"
+                }
+            }
+        ]
+    },
+    {
+        "matchs": [
+            {
+                "id": "any_match_id",
+                "winner": "4",
+                "team1": {
+                    "id": "3",
+                    "name": "Competitor 3",
+                    "score": 1
+                },
+                "team2": {
+                    "id": "4",
+                    "name": "Competitor 4",
+                    "score": 3
+                }
+            }
+        ]
+    }
+]
 ```
 
 ## Development
